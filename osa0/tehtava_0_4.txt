@@ -1,0 +1,31 @@
+selain->palvelin: HTTP POST https://studies.cs.helsinki.fi/exampleapp/new_note
+note over palvelin:
+palvelin ottaa POST pyynnön bodyna lähetetystä datasta
+muistiinpanon tekstin tallennettavaksi käyttämäänsä
+tietorakenteeseen ja palauttaa uudelleenohjauspyynnön
+selaimelle
+end note
+palvelin-->selain: HTTP Status Code: 302 (kohteeseen /notes)
+note over selain:
+selain lataa uudestaan sivun /notes
+end note
+selain->palvelin: HTTP GET https://studies.cs.helsinki.fi/exampleapp/notes
+palvelin-->selain: HTML-koodi
+selain->palvelin: HTTP GET https://studies.cs.helsinki.fi/exampleapp/main.css
+palvelin-->selain: main.css
+selain->palvelin: HTTP GET https://studies.cs.helsinki.fi/exampleapp/main.js
+palvelin-->selain: main.js
+
+note over selain:
+selain alkaa suorittaa js-koodia
+joka pyytää JSON-datan palvelimelta
+end note
+
+selain->palvelin: HTTP GET https://studies.cs.helsinki.fi/exampleapp/data.json
+palvelin-->selain: [{ content: "HTML on helppoa", date: "2019-01-01" }, ...]
+
+note over selain:
+selain suorittaa tapahtumankäsittelijän
+joka renderöi muistiinpanot näytölle,
+uusi muistiinpano on nyt mukana
+end note

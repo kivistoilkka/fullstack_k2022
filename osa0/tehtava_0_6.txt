@@ -1,0 +1,15 @@
+note over selain:
+selain suorittaa lomakkeen tapahtumankäsittelijän,
+joka lisää muistiinpanon selaimella olevaan
+tietorakenteeseen, suorittaa muistiinpanot
+näytölle renderöivän koodin ja suorittaa
+lomakkeelle syötetyn datan JSON-muodossa
+palvelimelle lähetävän koodin
+end note
+selain->palvelin: HTTP POST https://studies.cs.helsinki.fi/exampleapp/new_note_spa
+note over palvelin:
+palvelin ottaa POST pyynnön bodyna lähetetystä datasta
+muistiinpanon tekstin ja lähetysajan tallennettavaksi
+käyttämäänsä tietorakenteeseen
+end note
+palvelin-->selain: Status Code: 201 Created
