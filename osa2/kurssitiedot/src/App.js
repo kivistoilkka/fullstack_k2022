@@ -12,26 +12,16 @@ const Part = ({ name, exercises }) => (
   </div>
 )
 
-const Content = ({ parts }) => {
-  return (parts
-    .map(part =>
-      <Part key={part.id} name={part.name} exercises={part.exercises} />
-    )
-  )
-}
+const Content = ({ parts }) =>
+  parts.map(part =>
+    <Part key={part.id} name={part.name} exercises={part.exercises} />)
 
 const Total = ({ parts }) => {
-  const calcSum = (table) => {
-    let sum  = 0
-    for (let i = 0; i < table.length; i++) {
-      sum += table[i].exercises
-    }
-    return sum
-  }
+  const total = parts.reduce( (sum, part) => sum + part.exercises, 0)
   return (
     <div>
       <b>
-        Total of {calcSum(parts)} exercises
+        Total of {total} exercises
       </b>
     </div>
   )
