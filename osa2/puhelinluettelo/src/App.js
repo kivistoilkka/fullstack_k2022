@@ -20,14 +20,16 @@ const PersonForm = (props) => {
   )
 }
 
-const Person = ({ person }) =>
+const Person = ({ person, deletePerson }) =>
   <div>
-    {person.name} {person.number}
+    {person.name} {person.number} <button onClick={() => deletePerson(person)}>
+      delete
+    </button>
   </div>
 
-const Persons = ({ personsToShow }) =>
+const Persons = ({ personsToShow, deletePerson }) =>
   personsToShow.map(person =>
-    <Person key={person.name} person={person} />
+    <Person key={person.name} person={person} deletePerson={deletePerson} />
   )
 
 const App = () => {
@@ -68,6 +70,20 @@ const App = () => {
     }
   }
 
+  const deletePerson = (person) => {
+    if (window.confirm(`Delete ${person.name} ?`)){
+      personService
+        .remove(person.id)
+        .then()
+        .catch(error => {
+          alert(
+          `${person.name} was already deleted from server`
+          )
+        })
+      setPersons(persons.filter(p => p.id !== person.id))
+    }
+  }
+
   const personsToShow = persons.filter(person =>
     person.name.toLowerCase().includes(filterName.toLowerCase())
   )
@@ -87,7 +103,7 @@ const App = () => {
 
       <h3>Numbers</h3>
 
-      <Persons personsToShow={personsToShow} />
+      <Persons personsToShow={personsToShow} deletePerson={deletePerson} />
     </div>
   )
 }
