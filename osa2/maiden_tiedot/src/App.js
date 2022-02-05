@@ -28,7 +28,7 @@ const CountryInfo = ({ country }) => {
   )
 }
 
-const ShowCountries = ({ countries }) => {
+const ShowCountries = ({ countries, handleButton }) => {
   if (countries.length > 10) {
     return (
       <div>Too many matches, specify another filter</div>
@@ -51,6 +51,7 @@ const ShowCountries = ({ countries }) => {
         .map(country =>
           <div key={country.cca2}>
             {country.name.common}
+            <button onClick={() => handleButton(country.name.common)}>show</button>
           </div>)}
     </div>
   )
@@ -70,7 +71,8 @@ const App = () => {
   }, [])
   
   const handleNameFilter = (event) => setNameFilter(event.target.value)
-
+  const handleButton = (name) => setNameFilter(name)
+  
   const countriesToShow = countries.filter(country =>
     country.name.common.toLowerCase().includes(nameFilter.toLowerCase())
     )
@@ -78,7 +80,7 @@ const App = () => {
   return (
     <div>
       <CountryFilter nameFilter={nameFilter} handleNameFilter={handleNameFilter} />
-      <ShowCountries countries={countriesToShow} />
+      <ShowCountries countries={countriesToShow} handleButton={handleButton} />
     </div>
   )
 }
