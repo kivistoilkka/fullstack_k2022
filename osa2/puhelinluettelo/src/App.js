@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import personService from './services/persons'
 
-const Notification = ({ message }) => {
+const Notification = ({ message, errorState }) => {
   const notificationStyle = {
     color: 'green',
     background: 'lightgrey',
@@ -11,11 +11,18 @@ const Notification = ({ message }) => {
     padding: 10,
     marginBottom: 10
   }
+  const errorStyle = { ...notificationStyle, color: 'red' }
 
   if (message === null) {
     return null
   }
-
+  if (errorState) {
+    return (
+      <div style={errorStyle}>
+        {message}
+      </div>
+    )
+  }
   return (
     <div style={notificationStyle}>
       {message}
@@ -60,6 +67,7 @@ const App = () => {
   const [newNumber, setNewNumber] = useState('')
   const [filterName, setFilterName] = useState('')
   const [message, setMessage] = useState(null)
+  const [errorState, setErrorState] = useState(false)
 
   useEffect(() => {
     personService
@@ -134,9 +142,12 @@ const App = () => {
         setNewNumber('')
       })
       .catch(error => {
-        alert(
-        `${person.name} was already deleted from server`
-        )
+        setErrorState(true)
+        setMessage(`${person.name} was already deleted from server`)
+        setTimeout(() => {
+          setMessage(null)
+          setErrorState(false)
+        }, 5000)
         setPersons(persons.filter(p => p.id !== person.id))
       })
   }
@@ -149,7 +160,7 @@ const App = () => {
     <div>
       <h2>Phonebook</h2>
 
-      <Notification message={message} />
+      <Notification message={message} errorState={errorState} />
 
       <Filter filterName={filterName} handleFilterChange={handleFilterChange} />
 
