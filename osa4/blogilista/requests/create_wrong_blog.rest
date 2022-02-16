@@ -2,8 +2,7 @@ POST http://localhost:3003/api/blogs
 Content-Type: application/json
 
 {
-  "title": "Moduuleihin jakamisen toimivuustesti",
+  "title": "Virheenkäsittelyn toimivuustesti",
   "author": "Tehtävä 4.2",
-  "url": "www.fi",
-  "likes": 1
+  "likes": 3
 }
