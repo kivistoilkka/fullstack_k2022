@@ -41,9 +41,9 @@ const mostBlogs = (blogs) => {
 
   const most = _
     .chain(blogs)
-    .groupBy((blog) => blog.author)
-    .mapValues((author) => author.length)
-    .entries()
+    .groupBy(blog => blog.author)
+    .mapValues(author => author.length)
+    .toPairs()
     .maxBy(_.last)
     .value()
 
@@ -53,9 +53,33 @@ const mostBlogs = (blogs) => {
   }
 }
 
+const mostLikes = (blogs) => {
+  if (blogs.length === 0) {
+    return undefined
+  }
+
+  let authors = []
+
+  _.chain(blogs)
+    .groupBy(blog => blog.author)
+    .forEach((value, key) => {
+      const author = {
+        author: key,
+        likes: _.reduce(value, (acc, current) => acc + current.likes, 0)
+      }
+      authors.push(author)
+    })
+    .value()
+
+  const mostLikes = _.maxBy(authors, 'likes')
+
+  return mostLikes
+}
+
 module.exports = {
   dummy,
   totalLikes,
   favoriteBlog,
-  mostBlogs
+  mostBlogs,
+  mostLikes
 }
