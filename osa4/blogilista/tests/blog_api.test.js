@@ -51,10 +51,10 @@ test('a valid blog can be added', async () => {
     .expect(201)
     .expect('Content-Type', /application\/json/)
 
-  const response = await api.get('/api/blogs')
-  const titles = response.body.map(r => r.title)
+  const blogsAtEnd = await helper.blogsInDb()
+  expect(blogsAtEnd).toHaveLength(helper.initialBlogs.length + 1)
 
-  expect(response.body).toHaveLength(helper.initialBlogs.length + 1)
+  const titles = blogsAtEnd.map(r => r.title)
   expect(titles).toContain('Super interesting blog')
 })
 
