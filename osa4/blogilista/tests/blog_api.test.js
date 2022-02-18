@@ -29,6 +29,15 @@ test('a specific blog is within the returned blogs', async () => {
   expect(titles).toContain('Canonical string reduction')
 })
 
+test('id property is present and _id property is not present', async () => {
+  const response = await api.get('/api/blogs')
+  response.body.map(b => {
+    console.log(b)
+    expect(b.id).toBeDefined()
+    expect(b._id).not.toBeDefined()
+  })
+})
+
 afterAll(() => {
   mongoose.connection.close()
 })
