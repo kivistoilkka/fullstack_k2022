@@ -58,7 +58,7 @@ test('a valid blog can be added', async () => {
   expect(titles).toContain('Super interesting blog')
 })
 
-test('a blog without likes gets like value 0', async () => {
+test('blog without likes gets like value 0', async () => {
   const newBlog = {
     title: 'Very new blog',
     author: 'Imaginary Person',
@@ -75,6 +75,38 @@ test('a blog without likes gets like value 0', async () => {
   const addedBlog = blogsAtEnd.filter(b => b.title === 'Very new blog')[0]
   expect(addedBlog).toBeDefined()
   expect(addedBlog.likes).toEqual(0)
+})
+
+test('blog without title is not added', async () => {
+  const newBlog = {
+    author: 'Imaginary Person',
+    url: 'http://made.up.address/',
+    likes: 9
+  }
+
+  await api
+    .post('/api/blogs')
+    .send(newBlog)
+    .expect(400)
+
+  const blogsAtEnd = await helper.blogsInDb()
+  expect(blogsAtEnd).toHaveLength(helper.initialBlogs.length)
+})
+
+test('blog without url is not added', async () => {
+  const newBlog = {
+    title: 'Blog without url',
+    author: 'Imaginary Person',
+    likes: 9
+  }
+
+  await api
+    .post('/api/blogs')
+    .send(newBlog)
+    .expect(400)
+
+  const blogsAtEnd = await helper.blogsInDb()
+  expect(blogsAtEnd).toHaveLength(helper.initialBlogs.length)
 })
 
 afterAll(() => {
