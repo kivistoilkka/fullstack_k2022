@@ -20,8 +20,10 @@ mongoose.connect(mongoUrl)
 
 app.use(cors())
 app.use(express.json())
-morgan.token('body', (req) => JSON.stringify(req.body))
-app.use(morgan(':method :url :status :res[content-length] - :response-time ms :body'))
+if (process.env.NODE_ENV !== 'test') {
+  morgan.token('body', (req) => JSON.stringify(req.body))
+  app.use(morgan(':method :url :status :res[content-length] - :response-time ms :body'))
+}
 
 app.use('/api/blogs', blogsRouter)
 
