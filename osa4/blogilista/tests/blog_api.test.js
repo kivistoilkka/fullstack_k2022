@@ -6,7 +6,7 @@ const api = supertest(app)
 
 const Blog = require('../models/blog')
 
-describe('when there ios initially some blogs saved', () => {
+describe('when there is initially some blogs saved', () => {
   beforeEach(async () => {
     await Blog.deleteMany({})
     await Blog.insertMany(helper.initialBlogs)
@@ -126,6 +126,70 @@ describe('when there ios initially some blogs saved', () => {
 
       const titles = blogsAtEnd.map(r => r.title)
       expect(titles).not.toContain(blogToDelete.title)
+    })
+
+    test('fails with status code 400 if id is invalid', async () => {
+      const invalidId = '620845a020515562b992858'
+
+      await api
+        .delete(`/api/blogs/${invalidId}`)
+        .expect(400)
+    })
+  })
+
+  describe('modification of a blog', () => {
+    test('succeeds with status code 200 if id is valid', async () => {
+      const blogsAtStart = await helper.blogsInDb()
+      const blogToModify = blogsAtStart[0]
+
+      const newBlog = {
+        title: blogToModify.title,
+        author: blogToModify.author,
+        url: blogToModify.url,
+        likes: blogToModify.likes + 10
+      }
+
+      await api
+        .put(`/api/blogs/${blogToModify.id}`)
+        .send(newBlog)
+        .expect(200)
+        .expect('Content-Type', /application\/json/)
+
+      const blogsAtEnd = await helper.blogsInDb()
+      const modifiedBlog = blogsAtEnd.filter(b => b.id === blogToModify.id)[0]
+      expect(modifiedBlog.likes).toEqual(blogToModify.likes + 10)
+    })
+
+    test('fails with status code 404 if blog does not exist', async () => {
+      const validNonExistingId = await helper.nonExistingId()
+
+      const newBlog = {
+        title: 'This will not be sent',
+        author: 'Unknown',
+        url: 'Secret',
+        likes: 9000
+      }
+
+      await api
+        .put(`/api/blogs/${validNonExistingId}`)
+        .send(newBlog)
+        .expect(404)
+    })
+
+    test('fails with status code 400 if id is invalid', async () => {
+      const invalidId = '620845a020515562b992858'
+
+      const newBlog = {
+        title: 'This will not be sent',
+        author: 'Unknown',
+        url: 'Secret',
+        likes: 9000
+      }
+
+      await api
+        .put(`/api/blogs/${invalidId}`)
+        .send(newBlog)
+        .expect(400)
     })
   })
 })
