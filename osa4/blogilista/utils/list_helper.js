@@ -67,7 +67,7 @@ const mostLikes = (blogs) => {
         author: key,
         likes: _.reduce(value, (acc, current) => acc + current.likes, 0)
       }
-      authors.push(author)
+      authors = authors.concat(author)
     })
     .value()
 
