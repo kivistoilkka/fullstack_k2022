@@ -1,10 +1,10 @@
 POST http://localhost:3003/api/blogs
 Content-Type: application/json
-Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InJvb3QiLCJpZCI6IjYyMTIwMjYzZTAzZDExZTc2MTk3NGMyZSIsImlhdCI6MTY0NTQ3MTA3OCwiZXhwIjoxNjQ1NDcxMTM4fQ.bGi-0rTxcj-jcCxzld_BCF_wHEtXG-_TROEZGa_ah6I
+Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImtheXR0YWphMSIsImlkIjoiNjIxM2RjNjJiOTQ3MTI5NjM4NmMxZDY1IiwiaWF0IjoxNjQ1NDcxOTcxLCJleHAiOjE2NDU0NzU1NzF9.jf4MzvvkZ0HqBdxKmpy_fB7x4ZymDLI4GCmhjN5KoPQ
 
 {
-  "title": "Blogin lisääminen mahdollista vain tokenilla",
-  "author": "Tehtävä 4.19",
-  "url": "www.fi",
+  "title": "Tokenin erottaminen middlewareen",
+  "author": "Tehtävä 4.20",
+  "url": "http://www.helsinki.fi",
   "likes": 1
 }
