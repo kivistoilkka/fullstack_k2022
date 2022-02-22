@@ -8,6 +8,9 @@ const App = () => {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
+  const [newBlogTitle, setNewBlogTitle] = useState('')
+  const [newBlogAuthor, setNewBlogAuthor] = useState('')
+  const [newBlogUrl, setNewBlogUrl] = useState('')
 
   useEffect(() => {
     blogService.getAll().then(blogs =>
@@ -33,6 +36,7 @@ const App = () => {
       window.localStorage.setItem(
         'loggedBloglistUser', JSON.stringify(user)
       )
+      blogService.setToken(user.token)
       setUser(user)
       setUsername('')
       setPassword('')
@@ -48,7 +52,6 @@ const App = () => {
 
   const loginForm = () => (
     <div>
-      
       <form onSubmit={handleLogin}>
         <div>
           username
@@ -69,6 +72,56 @@ const App = () => {
           />
         </div>
         <button type="submit">login</button>
+      </form>
+    </div>
+  )
+
+  const addBlog = async (event) => {
+    event.preventDefault()
+    const blogObject = {
+      title: newBlogTitle,
+      author: newBlogAuthor,
+      url: newBlogUrl
+    }
+    const returnedBlog = await blogService.create(blogObject)
+    setBlogs(blogs.concat(returnedBlog))
+    setNewBlogTitle('')
+    setNewBlogAuthor('')
+    setNewBlogUrl('')
+  }
+
+  const blogForm = () => (
+    <div>
+      <h2>create new</h2>
+      <form onSubmit={addBlog}>
+        <div>
+          title:
+          <input
+            type="text"
+            value={newBlogTitle}
+            name="Title"
+            onChange={({ target }) => setNewBlogTitle(target.value)}
+          />
+        </div>
+        <div>
+          author:
+          <input
+            type="text"
+            value={newBlogAuthor}
+            name="Author"
+            onChange={({ target }) => setNewBlogAuthor(target.value)}
+          />
+        </div>
+        <div>
+          url:
+          <input
+            type="text"
+            value={newBlogUrl}
+            name="Url"
+            onChange={({ target }) => setNewBlogUrl(target.value)}
+          />
+        </div>
+        <button type="submit">create</button>
       </form>
     </div>
   )
@@ -100,6 +153,7 @@ const App = () => {
             logout
           </button>
         </p>
+        {blogForm()}
         {blogList()}
       </div>
     )
