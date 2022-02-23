@@ -3,6 +3,28 @@ import Blog from './components/Blog'
 import blogService from './services/blogs'
 import loginService from './services/login'
 
+const Notification = ({ notification }) => {
+  if (notification === null) {
+    return null
+  }
+
+  const style = {
+    color: notification.type === 'alert' ? 'red' : 'green',
+    background: 'lightgrey',
+    fontSize: 20,
+    borderStyle: 'solid',
+    borderRadius: 5,
+    padding: 10,
+    marginBottom: 10
+  }
+
+  return (
+    <div style={style}>
+      {notification.message}
+    </div>
+  )
+}
+
 const App = () => {
   const [blogs, setBlogs] = useState([])
   const [username, setUsername] = useState('')
@@ -11,6 +33,7 @@ const App = () => {
   const [newBlogTitle, setNewBlogTitle] = useState('')
   const [newBlogAuthor, setNewBlogAuthor] = useState('')
   const [newBlogUrl, setNewBlogUrl] = useState('')
+  const [notification, setNotification] = useState(null) 
 
   useEffect(() => {
     blogService.getAll().then(blogs =>
@@ -23,8 +46,16 @@ const App = () => {
     if (loggedUserJSON) {
       const user = JSON.parse(loggedUserJSON)
       setUser(user)
+      blogService.setToken(user.token)
     }
   }, [])
+
+  const notify = (message, type='info') => {
+    setNotification({ message, type })
+    setTimeout(() => {
+      setNotification(null)
+    }, 5000)
+  }
 
   const handleLogin = async (event) => {
     event.preventDefault()
@@ -41,7 +72,7 @@ const App = () => {
       setUsername('')
       setPassword('')
     } catch (exception) {
-      console.log('wrong credentials')
+      notify('Wrong username or password', 'alert')
     }
   }
 
@@ -78,16 +109,22 @@ const App = () => {
 
   const addBlog = async (event) => {
     event.preventDefault()
-    const blogObject = {
-      title: newBlogTitle,
-      author: newBlogAuthor,
-      url: newBlogUrl
+
+    try {
+      const blogObject = {
+        title: newBlogTitle,
+        author: newBlogAuthor,
+        url: newBlogUrl
+      }
+      const returnedBlog = await blogService.create(blogObject)
+      setBlogs(blogs.concat(returnedBlog))
+      notify(`A new blog ${returnedBlog.title} by ${returnedBlog.author} added`)
+      setNewBlogTitle('')
+      setNewBlogAuthor('')
+      setNewBlogUrl('')
+    } catch (exception) {
+      notify('Please fill all of the fields', 'alert')
     }
-    const returnedBlog = await blogService.create(blogObject)
-    setBlogs(blogs.concat(returnedBlog))
-    setNewBlogTitle('')
-    setNewBlogAuthor('')
-    setNewBlogUrl('')
   }
 
   const blogForm = () => (
@@ -139,6 +176,7 @@ const App = () => {
       return (
         <div>
           <h2>Log in to application</h2>
+          <Notification notification={notification} />
           {loginForm()}
         </div>
       )
@@ -147,6 +185,7 @@ const App = () => {
     return (
       <div>
         <h2>blogs</h2>
+        <Notification notification={notification} />
         <p>
           {user.name} logged in
           <button onClick={handleLogout}>
