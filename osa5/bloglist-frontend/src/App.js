@@ -98,10 +98,27 @@ const App = () => {
     }
   }
 
+  const increaseLikes = async id => {
+    const blog = blogs.find(b => b.id === id)
+    const user = blog.user
+    const changedBlog = {...blog, user: user.id, likes: blog.likes + 1}
+
+    try {
+      const returnedBlog = await blogService.update(id, changedBlog)
+      setBlogs(blogs.map(blog =>
+        blog.id !== id ?
+        blog :
+        { ...returnedBlog, user: user }
+      ))
+    } catch (exception) {
+      notify('Blog was already removed from server', 'alert')
+    }
+  }
+
   const blogList = () => (
     <div>
       {blogs.map(blog =>
-        <Blog key={blog.id} blog={blog} />
+        <Blog key={blog.id} blog={blog} increaseLikes={increaseLikes} />
       )}
     </div>
   )
