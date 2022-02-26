@@ -19,7 +19,7 @@ const App = () => {
     blogService.getAll().then(blogs => {
       blogs.sort((a, b) => b.likes - a.likes)
       setBlogs(blogs)
-    })  
+    })
   }, [])
 
   useEffect(() => {
@@ -57,7 +57,7 @@ const App = () => {
     }
   }
 
-  const handleLogout = (event) => {
+  const handleLogout = () => {
     window.localStorage.removeItem('loggedBloglistUser')
     setUser(null)
   }
@@ -102,15 +102,15 @@ const App = () => {
   const increaseLikes = async id => {
     const blog = blogs.find(b => b.id === id)
     const user = blog.user
-    const changedBlog = {...blog, user: user.id, likes: blog.likes + 1}
+    const changedBlog = { ...blog, user: user.id, likes: blog.likes + 1 }
 
     try {
       const returnedBlog = await blogService.update(id, changedBlog)
       const newBlogs = blogs
         .map(blog =>
-          blog.id !== id ?
-          blog :
-          { ...returnedBlog, user: user }
+          blog.id !== id
+            ? blog
+            : { ...returnedBlog, user: user }
         )
         .sort((a, b) => b.likes - a.likes)
       setBlogs(newBlogs)

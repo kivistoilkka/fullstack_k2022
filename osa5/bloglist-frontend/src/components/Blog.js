@@ -38,7 +38,7 @@ const Blog = ({ blog, increaseLikes, deleteBlog, user }) => {
       </div>
 
     </div>
-  )  
+  )
 }
 
 Blog.propTypes = {
