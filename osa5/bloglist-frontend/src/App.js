@@ -18,7 +18,7 @@ const App = () => {
   useEffect(() => {
     blogService.getAll().then(blogs => {
       blogs.sort((a, b) => b.likes - a.likes)
-      setBlogs( blogs )
+      setBlogs(blogs)
     })  
   }, [])
 
@@ -119,10 +119,28 @@ const App = () => {
     }
   }
 
+  const deleteBlog = async id => {
+    const blog = blogs.find(b => b.id === id)
+
+    if (window.confirm(`Remove blog ${blog.title} by ${blog.author}?`)) {
+      try {
+        await blogService.remove(id)
+        setBlogs(blogs.filter(b => b.id !== id))
+        notify(`Blog ${blog.title} by ${blog.author} removed`)
+      } catch (expection) {
+        notify('only the creator can delete a blog', 'alert')
+      }
+    }
+  }
+
   const blogList = () => (
     <div>
       {blogs.map(blog =>
-        <Blog key={blog.id} blog={blog} increaseLikes={increaseLikes} />
+        <Blog key={blog.id}
+          blog={blog}
+          increaseLikes={increaseLikes}
+          deleteBlog={deleteBlog}
+        />
       )}
     </div>
   )
