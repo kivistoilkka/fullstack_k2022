@@ -16,9 +16,10 @@ const App = () => {
   const blogFormRef = useRef()
 
   useEffect(() => {
-    blogService.getAll().then(blogs =>
+    blogService.getAll().then(blogs => {
+      blogs.sort((a, b) => b.likes - a.likes)
       setBlogs( blogs )
-    )  
+    })  
   }, [])
 
   useEffect(() => {
@@ -105,11 +106,14 @@ const App = () => {
 
     try {
       const returnedBlog = await blogService.update(id, changedBlog)
-      setBlogs(blogs.map(blog =>
-        blog.id !== id ?
-        blog :
-        { ...returnedBlog, user: user }
-      ))
+      const newBlogs = blogs
+        .map(blog =>
+          blog.id !== id ?
+          blog :
+          { ...returnedBlog, user: user }
+        )
+        .sort((a, b) => b.likes - a.likes)
+      setBlogs(newBlogs)
     } catch (exception) {
       notify('Blog was already removed from server', 'alert')
     }
