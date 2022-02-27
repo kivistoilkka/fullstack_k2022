@@ -16,18 +16,18 @@ const Blog = ({ blog, increaseLikes, deleteBlog, user }) => {
   const showWhenVisible = { display: infoVisible ? '' : 'none' }
 
   const removeButton = () => {
-    if (blog.user.name === user.name) {
+    if (blog.user.username === user.username) {
       return <button onClick={() => deleteBlog(blog.id)}>remove</button>
     }
   }
 
   return (
-    <div style={blogStyle}>
-      <div style={hideWhenVisible}>
+    <div style={blogStyle} className='blog'>
+      <div style={hideWhenVisible} className="visibleByDefaultBlogInfo">
         {blog.title} {blog.author}
         <button onClick={() => setInfoVisible(true)}>view</button>
       </div>
-      <div style={showWhenVisible}>
+      <div style={showWhenVisible} className="hiddenByDefaultBlogInfo">
         {blog.title} {blog.author}
         <button onClick={() => setInfoVisible(false)}>hide</button><br />
         {blog.url}<br />
