@@ -63,5 +63,13 @@ describe('<Blog />', () => {
     expect(visibleDiv).toHaveStyle('display: none')
     expect(hiddenDiv).not.toHaveStyle('display: none')
   })
+
+  test('clicking the like button twice calls event handler twice', () => {
+    const button = screen.getByText('like')
+    userEvent.click(button)
+    userEvent.click(button)
+
+    expect(increaseMockHandler.mock.calls).toHaveLength(2)
+  })
 })
 
