@@ -160,7 +160,7 @@ const App = () => {
     }
 
     return (
-      <div>
+      <div id='blogs'>
         <h2>blogs</h2>
         <Notification notification={notification} />
         <p>

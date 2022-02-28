@@ -71,6 +71,17 @@ describe('Blog app', function() {
         cy.contains('likes 0').contains('like').click()
         cy.contains('likes 1')
       })
+
+      it('it can be deleted', function() {
+        cy.contains('Another test blog Another author')
+          .contains('view')
+          .click()
+
+        cy.contains('remove').click()
+        cy.get('#blogs')
+          .should('not.contain', 'Another test blog Another author')
+          .and('not.contain', 'view')
+      })
     })
   })
 })
