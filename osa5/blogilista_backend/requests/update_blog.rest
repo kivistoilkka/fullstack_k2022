@@ -1,0 +1,9 @@
+PUT http://localhost:3003/api/blogs/620d0796df30128ae8c125fd
+Content-Type: application/json
+
+{
+    "title": "Ensimmäinen toimivuustesti",
+    "author": "Tehtävä 4.1",
+    "url": "www.fi",
+    "likes": 20
+}

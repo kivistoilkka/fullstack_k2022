@@ -1,0 +1,10 @@
+POST http://localhost:3003/api/blogs
+Content-Type: application/json
+Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InJvb3QiLCJpZCI6IjYyMTIwMjYzZTAzZDExZTc2MTk3NGMyZSIsImlhdCI6MTY0NTQ3NTM3MCwiZXhwIjoxNjQ1NDc4OTcwfQ.SV3h19xsnxhPuJ52hRvHh499V9qn4ACWWu6yzjnMfmU
+
+{
+  "title": "Poistettava blogi, root",
+  "author": "Tehtävä 4.21",
+  "url": "http://www.helsinki.fi",
+  "likes": 1
+}
