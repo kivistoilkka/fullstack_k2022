@@ -54,7 +54,7 @@ describe('Blog app', function() {
       cy.contains('Test blog Author of Test blog').find('button')
     })
 
-    describe('and when a note is created', function() {
+    describe('and when a blog is created', function() {
       beforeEach(function() {
         cy.createBlog({
           title: 'Another test blog',
