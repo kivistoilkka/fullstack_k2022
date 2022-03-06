@@ -7,6 +7,13 @@ const Notification = () => {
     padding: 10,
     borderWidth: 1
   }
+
+  if (notification === null) {
+    return (
+      <div></div>
+    )
+  }
+
   return (
     <div style={style}>
       {notification}
