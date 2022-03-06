@@ -18,7 +18,11 @@ const Anecdote = ({ anecdote, handleVote }) => {
 
 const AnecdoteList = () => {
   const dispatch = useDispatch()
-  const anecdotes = useSelector(state => state.anecdotes)
+  const anecdotes = useSelector(state =>
+      state.anecdotes.filter(anecdote =>
+        anecdote.content.toLowerCase().includes(state.filter.toLowerCase())
+      )
+    )
 
   const notify = (message) => {
     dispatch(setNotification(message))
