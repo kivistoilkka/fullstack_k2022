@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import Blog from './components/Blog'
 import Notification from './components/Notification'
 import Togglable from './components/Togglable'
@@ -8,21 +8,21 @@ import blogService from './services/blogs'
 import loginService from './services/login'
 
 import { createNotification } from './reducers/notificationReducer'
+import { setBlogs, createBlog } from './reducers/blogReducer'
 
 const App = () => {
-  const [blogs, setBlogs] = useState([])
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
 
   const dispatch = useDispatch()
+  const blogs = useSelector(({ blogs }) => blogs)
 
   const blogFormRef = useRef()
 
   useEffect(() => {
     blogService.getAll().then((blogs) => {
-      blogs.sort((a, b) => b.likes - a.likes)
-      setBlogs(blogs)
+      dispatch(setBlogs(blogs.sort((a, b) => b.likes - a.likes)))
     })
   }, [])
 
@@ -46,6 +46,7 @@ const App = () => {
         username,
         password,
       })
+      console.log(user)
 
       window.localStorage.setItem('loggedBloglistUser', JSON.stringify(user))
       blogService.setToken(user.token)
@@ -98,7 +99,12 @@ const App = () => {
     try {
       const returnedBlog = await blogService.create(blogObject)
       blogFormRef.current.toggleVisibility()
-      setBlogs(blogs.concat(returnedBlog))
+      dispatch(
+        createBlog({
+          ...returnedBlog,
+          user: { username: user.username, name: user.name },
+        })
+      )
       notify(`A new blog ${returnedBlog.title} by ${returnedBlog.author} added`)
     } catch (exception) {
       notify('Please fill all of the fields', 'alert')
