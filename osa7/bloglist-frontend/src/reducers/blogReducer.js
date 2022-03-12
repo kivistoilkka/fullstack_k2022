@@ -1,6 +1,8 @@
 import { createSlice } from '@reduxjs/toolkit'
 import blogService from '../services/blogs'
 
+import { createNotification } from './notificationReducer'
+
 const blogSlice = createSlice({
   name: 'blogs',
   initialState: [],
@@ -40,10 +42,17 @@ export const createBlog = (blogObject, user) => {
         user: { username: user.username, name: user.name },
       })
     )
+    dispatch(
+      createNotification(
+        `A new blog ${returnedBlog.title} by ${returnedBlog.author} added`,
+        'info',
+        5
+      )
+    )
   }
 }
 
-export const likeBlog = (blog, user) => {
+export const likeBlog = (blog) => {
   return async (dispatch) => {
     const likedBlog = await blogService.update(blog.id, {
       ...blog,
@@ -52,7 +61,7 @@ export const likeBlog = (blog, user) => {
     dispatch(
       setBlog({
         ...likedBlog,
-        user: { username: user.username, name: user.name },
+        user: { username: blog.user.username, name: blog.user.name },
       })
     )
   }
@@ -60,8 +69,21 @@ export const likeBlog = (blog, user) => {
 
 export const removeBlog = (blog) => {
   return async (dispatch) => {
-    await blogService.remove(blog.id)
-    dispatch(filterBlog(blog.id))
+    try {
+      await blogService.remove(blog.id)
+      dispatch(filterBlog(blog.id))
+      dispatch(
+        createNotification(
+          `Blog ${blog.title} by ${blog.author} removed`,
+          'info',
+          5
+        )
+      )
+    } catch (expection) {
+      dispatch(
+        createNotification('only the creator can delete a blog', 'alert', 5)
+      )
+    }
   }
 }
 

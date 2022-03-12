@@ -8,12 +8,7 @@ import blogService from './services/blogs'
 import loginService from './services/login'
 
 import { createNotification } from './reducers/notificationReducer'
-import {
-  createBlog,
-  initializeBlogs,
-  likeBlog,
-  removeBlog,
-} from './reducers/blogReducer'
+import { createBlog, initializeBlogs } from './reducers/blogReducer'
 
 const App = () => {
   const [username, setUsername] = useState('')
@@ -101,49 +96,13 @@ const App = () => {
     } else {
       blogFormRef.current.toggleVisibility()
       dispatch(createBlog(blogObject, user))
-      dispatch(
-        createNotification(
-          `A new blog ${blogObject.title} by ${blogObject.author} added`,
-          'info',
-          5
-        )
-      )
-    }
-  }
-
-  const increaseLikes = async (blog) => {
-    dispatch(likeBlog(blog, user))
-  }
-
-  const deleteBlog = async (blog) => {
-    if (window.confirm(`Remove blog ${blog.title} by ${blog.author}?`)) {
-      try {
-        dispatch(removeBlog(blog))
-        dispatch(
-          createNotification(
-            `Blog ${blog.title} by ${blog.author} removed`,
-            'info',
-            5
-          )
-        )
-      } catch (expection) {
-        dispatch(
-          createNotification('only the creator can delete a blog', 'alert', 5)
-        )
-      }
     }
   }
 
   const blogList = () => (
     <div>
       {blogsToView.map((blog) => (
-        <Blog
-          key={blog.id}
-          blog={blog}
-          increaseLikes={increaseLikes}
-          deleteBlog={deleteBlog}
-          user={user}
-        />
+        <Blog key={blog.id} blog={blog} user={user} />
       ))}
     </div>
   )
