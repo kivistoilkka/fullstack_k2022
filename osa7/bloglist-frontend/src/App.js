@@ -9,10 +9,10 @@ import loginService from './services/login'
 
 import { createNotification } from './reducers/notificationReducer'
 import {
-  setBlogs,
   createBlog,
   initializeBlogs,
   likeBlog,
+  removeBlog,
 } from './reducers/blogReducer'
 
 const App = () => {
@@ -111,13 +111,10 @@ const App = () => {
     dispatch(likeBlog(blog, user))
   }
 
-  const deleteBlog = async (id) => {
-    const blog = blogs.find((b) => b.id === id)
-
+  const deleteBlog = async (blog) => {
     if (window.confirm(`Remove blog ${blog.title} by ${blog.author}?`)) {
       try {
-        await blogService.remove(id)
-        setBlogs(blogs.filter((b) => b.id !== id))
+        dispatch(removeBlog(blog))
         notify(`Blog ${blog.title} by ${blog.author} removed`)
       } catch (expection) {
         notify('only the creator can delete a blog', 'alert')
