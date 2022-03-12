@@ -27,7 +27,7 @@ export const { setBlogs, appendBlog, setBlog, filterBlog } = blogSlice.actions
 export const initializeBlogs = () => {
   return async (dispatch) => {
     const blogs = await blogService.getAll()
-    dispatch(setBlogs(blogs.sort((a, b) => b.likes - a.likes)))
+    dispatch(setBlogs(blogs))
   }
 }
 

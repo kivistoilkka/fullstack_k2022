@@ -124,7 +124,7 @@ const App = () => {
 
   const blogList = () => (
     <div>
-      {blogs.map((blog) => (
+      {blogsToView.map((blog) => (
         <Blog
           key={blog.id}
           blog={blog}
@@ -136,34 +136,32 @@ const App = () => {
     </div>
   )
 
-  const conditionalView = () => {
-    if (user === null) {
-      return (
-        <div>
-          <h2>Log in to application</h2>
-          <Notification />
-          {loginForm()}
-        </div>
-      )
-    }
-
+  if (user === null) {
     return (
-      <div id="blogs">
-        <h2>blogs</h2>
+      <div>
+        <h2>Log in to application</h2>
         <Notification />
-        <p>
-          {user.name} logged in
-          <button onClick={handleLogout}>logout</button>
-        </p>
-        <Togglable buttonLabel="create new blog" ref={blogFormRef}>
-          <BlogForm createBlog={addBlog} />
-        </Togglable>
-        {blogList()}
+        {loginForm()}
       </div>
     )
   }
 
-  return <div>{conditionalView()}</div>
+  const blogsToView = [...blogs].sort((a, b) => b.likes - a.likes)
+
+  return (
+    <div id="blogs">
+      <h2>blogs</h2>
+      <Notification />
+      <p>
+        {user.name} logged in
+        <button onClick={handleLogout}>logout</button>
+      </p>
+      <Togglable buttonLabel="create new blog" ref={blogFormRef}>
+        <BlogForm createBlog={addBlog} />
+      </Togglable>
+      {blogList()}
+    </div>
+  )
 }
 
 export default App
