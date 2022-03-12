@@ -23,6 +23,6 @@ test('<BlogForm /> calls event handler with correct information', () => {
   expect(createBlog.mock.calls[0][0]).toEqual({
     title: 'Written Title',
     author: 'Written Author',
-    url: 'Written Url'
+    url: 'Written Url',
   })
 })

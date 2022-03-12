@@ -16,7 +16,7 @@ const App = () => {
   const blogFormRef = useRef()
 
   useEffect(() => {
-    blogService.getAll().then(blogs => {
+    blogService.getAll().then((blogs) => {
       blogs.sort((a, b) => b.likes - a.likes)
       setBlogs(blogs)
     })
@@ -31,7 +31,7 @@ const App = () => {
     }
   }, [])
 
-  const notify = (message, type='info') => {
+  const notify = (message, type = 'info') => {
     setNotification({ message, type })
     setTimeout(() => {
       setNotification(null)
@@ -42,12 +42,11 @@ const App = () => {
     event.preventDefault()
     try {
       const user = await loginService.login({
-        username, password,
+        username,
+        password,
       })
 
-      window.localStorage.setItem(
-        'loggedBloglistUser', JSON.stringify(user)
-      )
+      window.localStorage.setItem('loggedBloglistUser', JSON.stringify(user))
       blogService.setToken(user.token)
       setUser(user)
       setUsername('')
@@ -85,7 +84,9 @@ const App = () => {
             onChange={({ target }) => setPassword(target.value)}
           />
         </div>
-        <button id='login-button' type="submit">login</button>
+        <button id="login-button" type="submit">
+          login
+        </button>
       </form>
     </div>
   )
@@ -101,18 +102,16 @@ const App = () => {
     }
   }
 
-  const increaseLikes = async id => {
-    const blog = blogs.find(b => b.id === id)
+  const increaseLikes = async (id) => {
+    const blog = blogs.find((b) => b.id === id)
     const user = blog.user
     const changedBlog = { ...blog, user: user.id, likes: blog.likes + 1 }
 
     try {
       const returnedBlog = await blogService.update(id, changedBlog)
       const newBlogs = blogs
-        .map(blog =>
-          blog.id !== id
-            ? blog
-            : { ...returnedBlog, user: user }
+        .map((blog) =>
+          blog.id !== id ? blog : { ...returnedBlog, user: user }
         )
         .sort((a, b) => b.likes - a.likes)
       setBlogs(newBlogs)
@@ -121,13 +120,13 @@ const App = () => {
     }
   }
 
-  const deleteBlog = async id => {
-    const blog = blogs.find(b => b.id === id)
+  const deleteBlog = async (id) => {
+    const blog = blogs.find((b) => b.id === id)
 
     if (window.confirm(`Remove blog ${blog.title} by ${blog.author}?`)) {
       try {
         await blogService.remove(id)
-        setBlogs(blogs.filter(b => b.id !== id))
+        setBlogs(blogs.filter((b) => b.id !== id))
         notify(`Blog ${blog.title} by ${blog.author} removed`)
       } catch (expection) {
         notify('only the creator can delete a blog', 'alert')
@@ -137,14 +136,15 @@ const App = () => {
 
   const blogList = () => (
     <div>
-      {blogs.map(blog =>
-        <Blog key={blog.id}
+      {blogs.map((blog) => (
+        <Blog
+          key={blog.id}
           blog={blog}
           increaseLikes={increaseLikes}
           deleteBlog={deleteBlog}
           user={user}
         />
-      )}
+      ))}
     </div>
   )
 
@@ -160,14 +160,12 @@ const App = () => {
     }
 
     return (
-      <div id='blogs'>
+      <div id="blogs">
         <h2>blogs</h2>
         <Notification notification={notification} />
         <p>
           {user.name} logged in
-          <button onClick={handleLogout}>
-            logout
-          </button>
+          <button onClick={handleLogout}>logout</button>
         </p>
         <Togglable buttonLabel="create new blog" ref={blogFormRef}>
           <BlogForm createBlog={addBlog} />
@@ -177,11 +175,7 @@ const App = () => {
     )
   }
 
-  return (
-    <div>
-      {conditionalView()}
-    </div>
-  )
+  return <div>{conditionalView()}</div>
 }
 
 export default App

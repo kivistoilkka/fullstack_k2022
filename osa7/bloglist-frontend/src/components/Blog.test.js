@@ -15,14 +15,14 @@ describe('<Blog />', () => {
     user: {
       username: 'tester',
       name: 'TestUser',
-      blogs: []
-    }
+      blogs: [],
+    },
   }
 
   const user = {
     username: 'tester',
     name: 'TestUser',
-    blogs: []
+    blogs: [],
   }
 
   const increaseMockHandler = jest.fn()
@@ -41,14 +41,22 @@ describe('<Blog />', () => {
 
   test('renders blog title and author, but not url and likes by default', () => {
     const visibleDiv = container.querySelector('.visibleByDefaultBlogInfo')
-    expect(visibleDiv).toHaveTextContent('TestBlog TestAuthor', { exact: false })
-    expect(visibleDiv).not.toHaveTextContent('http://www.helsinki.fi', { exact: false })
+    expect(visibleDiv).toHaveTextContent('TestBlog TestAuthor', {
+      exact: false,
+    })
+    expect(visibleDiv).not.toHaveTextContent('http://www.helsinki.fi', {
+      exact: false,
+    })
     expect(visibleDiv).not.toHaveTextContent('likes 0', { exact: false })
     expect(visibleDiv).not.toHaveStyle('display: none')
 
     const hiddenDiv = container.querySelector('.hiddenByDefaultBlogInfo')
-    expect(hiddenDiv).toHaveTextContent('TestBlog TestAuthor', { exact: false })
-    expect(hiddenDiv).toHaveTextContent('http://www.helsinki.fi', { exact: false })
+    expect(hiddenDiv).toHaveTextContent('TestBlog TestAuthor', {
+      exact: false,
+    })
+    expect(hiddenDiv).toHaveTextContent('http://www.helsinki.fi', {
+      exact: false,
+    })
     expect(hiddenDiv).toHaveTextContent('likes 0', { exact: false })
     expect(hiddenDiv).toHaveStyle('display: none')
   })
@@ -72,4 +80,3 @@ describe('<Blog />', () => {
     expect(increaseMockHandler.mock.calls).toHaveLength(2)
   })
 })
-
