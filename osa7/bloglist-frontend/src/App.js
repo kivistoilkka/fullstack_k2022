@@ -8,7 +8,7 @@ import blogService from './services/blogs'
 import loginService from './services/login'
 
 import { createNotification } from './reducers/notificationReducer'
-import { setBlogs, createBlog } from './reducers/blogReducer'
+import { setBlogs, createBlog, initializeBlogs } from './reducers/blogReducer'
 
 const App = () => {
   const [username, setUsername] = useState('')
@@ -21,9 +21,7 @@ const App = () => {
   const blogFormRef = useRef()
 
   useEffect(() => {
-    blogService.getAll().then((blogs) => {
-      dispatch(setBlogs(blogs.sort((a, b) => b.likes - a.likes)))
-    })
+    dispatch(initializeBlogs())
   }, [])
 
   useEffect(() => {
@@ -46,7 +44,6 @@ const App = () => {
         username,
         password,
       })
-      console.log(user)
 
       window.localStorage.setItem('loggedBloglistUser', JSON.stringify(user))
       blogService.setToken(user.token)
@@ -97,15 +94,9 @@ const App = () => {
 
   const addBlog = async (blogObject) => {
     try {
-      const returnedBlog = await blogService.create(blogObject)
       blogFormRef.current.toggleVisibility()
-      dispatch(
-        createBlog({
-          ...returnedBlog,
-          user: { username: user.username, name: user.name },
-        })
-      )
-      notify(`A new blog ${returnedBlog.title} by ${returnedBlog.author} added`)
+      dispatch(createBlog(blogObject, user))
+      notify(`A new blog ${blogObject.title} by ${blogObject.author} added`)
     } catch (exception) {
       notify('Please fill all of the fields', 'alert')
     }
