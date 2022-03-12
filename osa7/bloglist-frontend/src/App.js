@@ -38,10 +38,6 @@ const App = () => {
     }
   }, [])
 
-  const notify = (message, type = 'info') => {
-    dispatch(createNotification(message, type, 5))
-  }
-
   const handleLogin = async (event) => {
     event.preventDefault()
     try {
@@ -56,7 +52,7 @@ const App = () => {
       setUsername('')
       setPassword('')
     } catch (exception) {
-      notify('Wrong username or password', 'alert')
+      dispatch(createNotification('Wrong username or password', 'alert', 5))
     }
   }
 
@@ -64,7 +60,7 @@ const App = () => {
     window.localStorage.removeItem('loggedBloglistUser')
     setUser(null)
     blogService.setToken(null)
-    notify('You have logged out, good bye!')
+    dispatch(createNotification('You have logged out, good bye!', 'info', 5))
   }
 
   const loginForm = () => (
@@ -98,12 +94,20 @@ const App = () => {
   )
 
   const addBlog = async (blogObject) => {
-    try {
+    const { title, author, url } = blogObject
+
+    if (title === '' || author === '' || url === '') {
+      dispatch(createNotification('Please fill all of the fields', 'alert', 5))
+    } else {
       blogFormRef.current.toggleVisibility()
       dispatch(createBlog(blogObject, user))
-      notify(`A new blog ${blogObject.title} by ${blogObject.author} added`)
-    } catch (exception) {
-      notify('Please fill all of the fields', 'alert')
+      dispatch(
+        createNotification(
+          `A new blog ${blogObject.title} by ${blogObject.author} added`,
+          'info',
+          5
+        )
+      )
     }
   }
 
@@ -115,9 +119,17 @@ const App = () => {
     if (window.confirm(`Remove blog ${blog.title} by ${blog.author}?`)) {
       try {
         dispatch(removeBlog(blog))
-        notify(`Blog ${blog.title} by ${blog.author} removed`)
+        dispatch(
+          createNotification(
+            `Blog ${blog.title} by ${blog.author} removed`,
+            'info',
+            5
+          )
+        )
       } catch (expection) {
-        notify('only the creator can delete a blog', 'alert')
+        dispatch(
+          createNotification('only the creator can delete a blog', 'alert', 5)
+        )
       }
     }
   }
