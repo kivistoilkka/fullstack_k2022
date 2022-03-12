@@ -8,7 +8,12 @@ import blogService from './services/blogs'
 import loginService from './services/login'
 
 import { createNotification } from './reducers/notificationReducer'
-import { setBlogs, createBlog, initializeBlogs } from './reducers/blogReducer'
+import {
+  setBlogs,
+  createBlog,
+  initializeBlogs,
+  likeBlog,
+} from './reducers/blogReducer'
 
 const App = () => {
   const [username, setUsername] = useState('')
@@ -102,22 +107,8 @@ const App = () => {
     }
   }
 
-  const increaseLikes = async (id) => {
-    const blog = blogs.find((b) => b.id === id)
-    const user = blog.user
-    const changedBlog = { ...blog, user: user.id, likes: blog.likes + 1 }
-
-    try {
-      const returnedBlog = await blogService.update(id, changedBlog)
-      const newBlogs = blogs
-        .map((blog) =>
-          blog.id !== id ? blog : { ...returnedBlog, user: user }
-        )
-        .sort((a, b) => b.likes - a.likes)
-      setBlogs(newBlogs)
-    } catch (exception) {
-      notify('Blog was already removed from server', 'alert')
-    }
+  const increaseLikes = async (blog) => {
+    dispatch(likeBlog(blog, user))
   }
 
   const deleteBlog = async (id) => {
