@@ -60,6 +60,8 @@ const App = () => {
   const handleLogout = () => {
     window.localStorage.removeItem('loggedBloglistUser')
     setUser(null)
+    blogService.setToken(null)
+    notify('You have logged out, good bye!')
   }
 
   const loginForm = () => (
