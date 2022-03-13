@@ -39,14 +39,22 @@ const Blog = () => {
       <h2>
         {blog.title} {blog.author}
       </h2>
-      {blog.url}
-      <br />
-      likes {blog.likes}
-      <button onClick={() => increaseLikes(blog)}>like</button>
-      <br />
-      {blog.user.name}
-      <br />
-      {removeButton()}
+      <p>
+        {blog.url}
+        <br />
+        likes {blog.likes}
+        <button onClick={() => increaseLikes(blog)}>like</button>
+        <br />
+        {blog.user.name}
+        <br />
+        {removeButton()}
+      </p>
+      <h3>comments</h3>
+      <ul>
+        {blog.comments.map((comment) => (
+          <li key={comment}>{comment}</li>
+        ))}
+      </ul>
     </div>
   )
 }
