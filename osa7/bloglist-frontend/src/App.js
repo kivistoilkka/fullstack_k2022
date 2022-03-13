@@ -1,11 +1,12 @@
 import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { Routes, Route } from 'react-router-dom'
+import { Routes, Route, Navigate } from 'react-router-dom'
 import Notification from './components/Notification'
 import LoginForm from './components/LoginForm'
 import BlogList from './components/BlogList'
 import Userlist from './components/Userlist'
 import User from './components/User'
+import Blog from './components/Blog'
 
 import { initializeBlogs } from './reducers/blogReducer'
 import { loginFromLocalStorage, logout } from './reducers/userReducer'
@@ -52,6 +53,8 @@ const App = () => {
       </p>
       <Routes>
         <Route path="/" element={<BlogList />} />
+        <Route path="/blogs" element={<Navigate replace to="/" />} />
+        <Route path="/blogs/:id" element={<Blog />} />
         <Route path="/users" element={<Userlist />} />
         <Route path="/users/:id" element={<User />} />
       </Routes>
