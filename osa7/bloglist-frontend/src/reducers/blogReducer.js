@@ -2,7 +2,10 @@ import { createSlice } from '@reduxjs/toolkit'
 import blogService from '../services/blogs'
 
 import { createNotification } from './notificationReducer'
-import { addBlogToUserInState } from './userlistReducer'
+import {
+  addBlogToUserInState,
+  removeBlogFromUserInState,
+} from './userlistReducer'
 
 const blogSlice = createSlice({
   name: 'blogs',
@@ -34,16 +37,21 @@ export const initializeBlogs = () => {
   }
 }
 
-export const createBlog = (blogObject, user) => {
-  return async (dispatch) => {
+export const createBlog = (blogObject) => {
+  return async (dispatch, getState) => {
     const returnedBlog = await blogService.create(blogObject)
+    const user = getState().userlist.find((u) => u.id === returnedBlog.user)
     dispatch(
       appendBlog({
         ...returnedBlog,
-        user: { username: user.username, name: user.name },
+        user: {
+          username: user.username,
+          name: user.name,
+          id: returnedBlog.user,
+        },
       })
     )
-    dispatch(addBlogToUserInState(user, returnedBlog))
+    dispatch(addBlogToUserInState(returnedBlog, user))
     dispatch(
       createNotification(
         `A new blog ${returnedBlog.title} by ${returnedBlog.author} added`,
@@ -63,7 +71,11 @@ export const likeBlog = (blog) => {
     dispatch(
       setBlog({
         ...likedBlog,
-        user: { username: blog.user.username, name: blog.user.name },
+        user: {
+          username: blog.user.username,
+          name: blog.user.name,
+          id: likedBlog.user,
+        },
       })
     )
   }
@@ -74,6 +86,7 @@ export const removeBlog = (blog) => {
     try {
       await blogService.remove(blog.id)
       dispatch(filterBlog(blog.id))
+      dispatch(removeBlogFromUserInState(blog))
       dispatch(
         createNotification(
           `Blog ${blog.title} by ${blog.author} removed`,

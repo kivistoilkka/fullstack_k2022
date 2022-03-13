@@ -9,7 +9,6 @@ import { createBlog } from '../reducers/blogReducer'
 
 const BlogList = () => {
   const dispatch = useDispatch()
-  const user = useSelector(({ user }) => user)
   const blogs = useSelector(({ blogs }) => blogs)
   const blogsToView = [...blogs].sort((a, b) => b.likes - a.likes)
 
@@ -30,7 +29,7 @@ const BlogList = () => {
       dispatch(createNotification('Please fill all of the fields', 'alert', 5))
     } else {
       blogFormRef.current.toggleVisibility()
-      dispatch(createBlog(blogObject, user))
+      dispatch(createBlog(blogObject))
     }
   }
 

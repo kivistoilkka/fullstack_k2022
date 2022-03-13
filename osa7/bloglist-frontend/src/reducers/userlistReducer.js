@@ -24,12 +24,28 @@ export const initializeUserlist = () => {
   }
 }
 
-export const addBlogToUserInState = (user, blog) => {
+export const addBlogToUserInState = (blog, user) => {
+  return (dispatch) => {
+    const blogToAdd = {
+      title: blog.title,
+      author: blog.author,
+      url: blog.url,
+      id: blog.id,
+    }
+    const updatedUser = {
+      ...user,
+      blogs: user.blogs.concat(blogToAdd),
+    }
+    dispatch(modifyUser(updatedUser))
+  }
+}
+
+export const removeBlogFromUserInState = (blog) => {
   return (dispatch, getState) => {
-    const userToUpdate = getState().userlist.find((u) => u.id === blog.user)
+    const userToUpdate = getState().userlist.find((u) => u.id === blog.user.id)
     const updatedUser = {
       ...userToUpdate,
-      blogs: userToUpdate.blogs.concat(blog),
+      blogs: userToUpdate.blogs.filter((b) => b.id !== blog.id),
     }
     dispatch(modifyUser(updatedUser))
   }
