@@ -13,7 +13,8 @@ const morgan = require('morgan')
 
 const mongoUrl = config.MONGODB_URI
 logger.info('connecting to', mongoUrl)
-mongoose.connect(mongoUrl)
+mongoose
+  .connect(mongoUrl)
   .then(() => {
     logger.info('connected to MongoDB')
   })
@@ -25,7 +26,11 @@ app.use(cors())
 app.use(express.json())
 if (process.env.NODE_ENV !== 'test') {
   morgan.token('body', (req) => JSON.stringify(req.body))
-  app.use(morgan(':method :url :status :res[content-length] - :response-time ms :body'))
+  app.use(
+    morgan(
+      ':method :url :status :res[content-length] - :response-time ms :body'
+    )
+  )
 }
 app.use(middleware.tokenExtractor)
 

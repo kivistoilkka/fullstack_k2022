@@ -26,13 +26,13 @@ describe('when there is initially some blogs saved', () => {
 
   test('a specific blog is within the returned blogs', async () => {
     const response = await api.get('/api/blogs')
-    const titles = response.body.map(r => r.title)
+    const titles = response.body.map((r) => r.title)
     expect(titles).toContain('Canonical string reduction')
   })
 
   test('id property is present and _id property is not present', async () => {
     const response = await api.get('/api/blogs')
-    response.body.map(b => {
+    response.body.map((b) => {
       expect(b.id).toBeDefined()
       expect(b._id).not.toBeDefined()
     })
@@ -44,7 +44,7 @@ describe('when there is initially some blogs saved', () => {
         title: 'Super interesting blog',
         author: 'Imaginary Person',
         url: 'http://made.up.address/',
-        likes: 9
+        likes: 9,
       }
 
       await api
@@ -56,7 +56,7 @@ describe('when there is initially some blogs saved', () => {
       const blogsAtEnd = await helper.blogsInDb()
       expect(blogsAtEnd).toHaveLength(helper.initialBlogs.length + 1)
 
-      const titles = blogsAtEnd.map(r => r.title)
+      const titles = blogsAtEnd.map((r) => r.title)
       expect(titles).toContain('Super interesting blog')
     })
 
@@ -74,7 +74,7 @@ describe('when there is initially some blogs saved', () => {
         .expect('Content-Type', /application\/json/)
 
       const blogsAtEnd = await helper.blogsInDb()
-      const addedBlog = blogsAtEnd.filter(b => b.title === 'Very new blog')[0]
+      const addedBlog = blogsAtEnd.filter((b) => b.title === 'Very new blog')[0]
       expect(addedBlog).toBeDefined()
       expect(addedBlog.likes).toEqual(0)
     })
@@ -83,13 +83,10 @@ describe('when there is initially some blogs saved', () => {
       const newBlog = {
         author: 'Imaginary Person',
         url: 'http://made.up.address/',
-        likes: 9
+        likes: 9,
       }
 
-      await api
-        .post('/api/blogs')
-        .send(newBlog)
-        .expect(400)
+      await api.post('/api/blogs').send(newBlog).expect(400)
 
       const blogsAtEnd = await helper.blogsInDb()
       expect(blogsAtEnd).toHaveLength(helper.initialBlogs.length)
@@ -99,13 +96,10 @@ describe('when there is initially some blogs saved', () => {
       const newBlog = {
         title: 'Blog without url',
         author: 'Imaginary Person',
-        likes: 9
+        likes: 9,
       }
 
-      await api
-        .post('/api/blogs')
-        .send(newBlog)
-        .expect(400)
+      await api.post('/api/blogs').send(newBlog).expect(400)
 
       const blogsAtEnd = await helper.blogsInDb()
       expect(blogsAtEnd).toHaveLength(helper.initialBlogs.length)
@@ -117,23 +111,19 @@ describe('when there is initially some blogs saved', () => {
       const blogsAtStart = await helper.blogsInDb()
       const blogToDelete = blogsAtStart[0]
 
-      await api
-        .delete(`/api/blogs/${blogToDelete.id}`)
-        .expect(204)
+      await api.delete(`/api/blogs/${blogToDelete.id}`).expect(204)
 
       const blogsAtEnd = await helper.blogsInDb()
       expect(blogsAtEnd).toHaveLength(helper.initialBlogs.length - 1)
 
-      const titles = blogsAtEnd.map(r => r.title)
+      const titles = blogsAtEnd.map((r) => r.title)
       expect(titles).not.toContain(blogToDelete.title)
     })
 
     test('fails with status code 400 if id is invalid', async () => {
       const invalidId = '620845a020515562b992858'
 
-      await api
-        .delete(`/api/blogs/${invalidId}`)
-        .expect(400)
+      await api.delete(`/api/blogs/${invalidId}`).expect(400)
     })
   })
 
@@ -146,7 +136,7 @@ describe('when there is initially some blogs saved', () => {
         title: blogToModify.title,
         author: blogToModify.author,
         url: blogToModify.url,
-        likes: blogToModify.likes + 10
+        likes: blogToModify.likes + 10,
       }
 
       await api
@@ -156,7 +146,7 @@ describe('when there is initially some blogs saved', () => {
         .expect('Content-Type', /application\/json/)
 
       const blogsAtEnd = await helper.blogsInDb()
-      const modifiedBlog = blogsAtEnd.filter(b => b.id === blogToModify.id)[0]
+      const modifiedBlog = blogsAtEnd.filter((b) => b.id === blogToModify.id)[0]
       expect(modifiedBlog.likes).toEqual(blogToModify.likes + 10)
     })
 
@@ -167,7 +157,7 @@ describe('when there is initially some blogs saved', () => {
         title: 'This will not be sent',
         author: 'Unknown',
         url: 'Secret',
-        likes: 9000
+        likes: 9000,
       }
 
       await api
@@ -183,13 +173,10 @@ describe('when there is initially some blogs saved', () => {
         title: 'This will not be sent',
         author: 'Unknown',
         url: 'Secret',
-        likes: 9000
+        likes: 9000,
       }
 
-      await api
-        .put(`/api/blogs/${invalidId}`)
-        .send(newBlog)
-        .expect(400)
+      await api.put(`/api/blogs/${invalidId}`).send(newBlog).expect(400)
     })
   })
 })

@@ -35,7 +35,7 @@ describe('when there is initially one user at db', () => {
     const usersAtEnd = await helper.usersInDb()
     expect(usersAtEnd).toHaveLength(usersAtStart.length + 1)
 
-    const usernames = usersAtEnd.map(u => u.username)
+    const usernames = usersAtEnd.map((u) => u.username)
     expect(usernames).toContain(newUser.username)
   })
 
@@ -142,7 +142,6 @@ describe('when there is initially one user at db', () => {
     expect(usersAtEnd).toHaveLength(usersAtStart.length)
   })
 })
-
 
 afterAll(() => {
   mongoose.connection.close()
