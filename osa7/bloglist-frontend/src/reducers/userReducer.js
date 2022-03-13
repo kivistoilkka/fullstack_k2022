@@ -33,6 +33,7 @@ export const login = (username, password) => {
       window.localStorage.setItem('loggedBloglistUser', JSON.stringify(user))
       blogService.setToken(user.token)
       dispatch(setUser(user))
+      dispatch(createNotification(`Welcome ${user.name}!`, 'info', 5))
     } catch (exception) {
       dispatch(createNotification('Wrong username or password', 'alert', 5))
     }
