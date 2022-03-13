@@ -13,7 +13,7 @@ const userlistSlice = createSlice({
 
 export const { setUserlist } = userlistSlice.actions
 
-export const initializeUsers = () => {
+export const initializeUserlist = () => {
   return async (dispatch) => {
     const userlist = await userlistService.getAll()
     dispatch(setUserlist(userlist))

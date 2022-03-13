@@ -1,14 +1,15 @@
 import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
+import { Routes, Route } from 'react-router-dom'
 import Notification from './components/Notification'
 import LoginForm from './components/LoginForm'
 import BlogList from './components/BlogList'
-import Users from './components/Users'
+import Userlist from './components/Userlist'
+import User from './components/User'
 
 import { initializeBlogs } from './reducers/blogReducer'
 import { loginFromLocalStorage, logout } from './reducers/userReducer'
-import { initializeUsers } from './reducers/userlistReducer'
+import { initializeUserlist } from './reducers/userlistReducer'
 
 const App = () => {
   const dispatch = useDispatch()
@@ -16,7 +17,7 @@ const App = () => {
 
   useEffect(() => {
     dispatch(initializeBlogs())
-    dispatch(initializeUsers())
+    dispatch(initializeUserlist())
   }, [])
 
   useEffect(() => {
@@ -42,20 +43,19 @@ const App = () => {
   }
 
   return (
-    <Router>
-      <div id="blogs">
-        <h2>blogs</h2>
-        <Notification />
-        <p>
-          {user.name} logged in
-          <button onClick={handleLogout}>logout</button>
-        </p>
-        <Routes>
-          <Route path="/" element={<BlogList />} />
-          <Route path="/users" element={<Users />} />
-        </Routes>
-      </div>
-    </Router>
+    <div id="blogs">
+      <h2>blogs</h2>
+      <Notification />
+      <p>
+        {user.name} logged in
+        <button onClick={handleLogout}>logout</button>
+      </p>
+      <Routes>
+        <Route path="/" element={<BlogList />} />
+        <Route path="/users" element={<Userlist />} />
+        <Route path="/users/:id" element={<User />} />
+      </Routes>
+    </div>
   )
 }
 
