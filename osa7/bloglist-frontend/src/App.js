@@ -4,19 +4,18 @@ import Blog from './components/Blog'
 import Notification from './components/Notification'
 import Togglable from './components/Togglable'
 import BlogForm from './components/BlogForm'
-import blogService from './services/blogs'
-import loginService from './services/login'
 
 import { createNotification } from './reducers/notificationReducer'
 import { createBlog, initializeBlogs } from './reducers/blogReducer'
+import { loginFromLocalStorage, login, logout } from './reducers/userReducer'
 
 const App = () => {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
-  const [user, setUser] = useState(null)
 
   const dispatch = useDispatch()
   const blogs = useSelector(({ blogs }) => blogs)
+  const user = useSelector(({ user }) => user)
 
   const blogFormRef = useRef()
 
@@ -28,34 +27,19 @@ const App = () => {
     const loggedUserJSON = window.localStorage.getItem('loggedBloglistUser')
     if (loggedUserJSON) {
       const user = JSON.parse(loggedUserJSON)
-      setUser(user)
-      blogService.setToken(user.token)
+      dispatch(loginFromLocalStorage(user))
     }
   }, [])
 
   const handleLogin = async (event) => {
     event.preventDefault()
-    try {
-      const user = await loginService.login({
-        username,
-        password,
-      })
-
-      window.localStorage.setItem('loggedBloglistUser', JSON.stringify(user))
-      blogService.setToken(user.token)
-      setUser(user)
-      setUsername('')
-      setPassword('')
-    } catch (exception) {
-      dispatch(createNotification('Wrong username or password', 'alert', 5))
-    }
+    dispatch(login(username, password))
+    setUsername('')
+    setPassword('')
   }
 
   const handleLogout = () => {
-    window.localStorage.removeItem('loggedBloglistUser')
-    setUser(null)
-    blogService.setToken(null)
-    dispatch(createNotification('You have logged out, good bye!', 'info', 5))
+    dispatch(logout())
   }
 
   const loginForm = () => (
