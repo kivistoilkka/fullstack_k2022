@@ -1,0 +1,6 @@
+POST http://localhost:3003/api/blogs/622e71f6fcdff95d799c9c06/comments
+Content-Type: application/json
+
+{
+  "comment": "REST client is ok for commenting"
+}
