@@ -5,18 +5,17 @@ import { likeBlog, removeBlog } from '../reducers/blogReducer'
 
 const Blog = () => {
   const blogs = useSelector(({ blogs }) => blogs)
+  const user = useSelector(({ user }) => user)
   const id = useParams().id
+
+  const dispatch = useDispatch()
+  const navigate = useNavigate()
 
   const blog = blogs.find((b) => b.id === id)
 
   if (!blog) {
     return null
   }
-
-  const user = useSelector(({ user }) => user)
-
-  const dispatch = useDispatch()
-  const navigate = useNavigate()
 
   const increaseLikes = async (blog) => {
     dispatch(likeBlog(blog))
