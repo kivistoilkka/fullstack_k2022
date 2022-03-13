@@ -2,6 +2,7 @@ import { createSlice } from '@reduxjs/toolkit'
 import blogService from '../services/blogs'
 
 import { createNotification } from './notificationReducer'
+import { addBlogToUserInState } from './userlistReducer'
 
 const blogSlice = createSlice({
   name: 'blogs',
@@ -42,6 +43,7 @@ export const createBlog = (blogObject, user) => {
         user: { username: user.username, name: user.name },
       })
     )
+    dispatch(addBlogToUserInState(user, returnedBlog))
     dispatch(
       createNotification(
         `A new blog ${returnedBlog.title} by ${returnedBlog.author} added`,
