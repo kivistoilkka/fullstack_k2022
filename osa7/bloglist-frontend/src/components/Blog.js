@@ -48,7 +48,7 @@ const Blog = () => {
         {blog.title} {blog.author}
       </h2>
       <p>
-        {blog.url}
+        <a href={blog.url}>{blog.url}</a>
         <br />
         likes {blog.likes}
         <button onClick={() => increaseLikes(blog)}>like</button>
