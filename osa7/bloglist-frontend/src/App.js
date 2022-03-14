@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { Routes, Route, Navigate, Link } from 'react-router-dom'
+import { Button, Navbar, Nav } from 'react-bootstrap'
 import Notification from './components/Notification'
 import LoginForm from './components/LoginForm'
 import BlogList from './components/BlogList'
@@ -44,19 +45,34 @@ const App = () => {
   }
 
   return (
-    <div id="blogs">
-      <div style={{ background: 'lightgrey', padding: 5 }}>
-        <Link style={{ padding: 5 }} to="/">
-          blogs
-        </Link>
-        <Link style={{ padding: 5 }} to="/users">
-          users
-        </Link>
-        {user.name} logged in
-        <button onClick={handleLogout}>logout</button>
-      </div>
+    <div id="blogs" className="container">
+      <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark">
+        <Navbar.Brand href="#">
+          <h2>blog app</h2>
+        </Navbar.Brand>
+        <Navbar.Toggle aria-controls="responsive-navbar-nav" />
+        <Navbar.Collapse id="responsive-navbar-nav">
+          <Nav className="me-auto">
+            <Navbar.Text>
+              <Link style={{ paddingRight: 10 }} to="/">
+                blogs
+              </Link>
+            </Navbar.Text>
+            <Navbar.Text>
+              <Link style={{ paddingRight: 10 }} to="/users">
+                users
+              </Link>
+            </Navbar.Text>
+            <Navbar.Text>
+              {user.name} logged in
+              <Button variant="primary" onClick={handleLogout}>
+                logout
+              </Button>
+            </Navbar.Text>
+          </Nav>
+        </Navbar.Collapse>
+      </Navbar>
 
-      <h2>blog app</h2>
       <Notification />
       <Routes>
         <Route path="/" element={<BlogList />} />

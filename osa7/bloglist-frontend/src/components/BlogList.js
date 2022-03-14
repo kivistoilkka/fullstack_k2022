@@ -3,6 +3,7 @@ import { useSelector, useDispatch } from 'react-redux'
 import BlogForm from './BlogForm'
 import Togglable from './Togglable'
 import { Link } from 'react-router-dom'
+import { Table } from 'react-bootstrap'
 
 import { createNotification } from '../reducers/notificationReducer'
 import { createBlog } from '../reducers/blogReducer'
@@ -14,19 +15,13 @@ const BlogList = () => {
 
   const blogFormRef = useRef()
 
-  const blogStyle = {
-    paddingTop: 10,
-    paddingLeft: 2,
-    border: 'solid',
-    borderWidth: 1,
-    marginBottom: 5,
-  }
-
   const addBlog = async (blogObject) => {
     const { title, author, url } = blogObject
 
     if (title === '' || author === '' || url === '') {
-      dispatch(createNotification('Please fill all of the fields', 'alert', 5))
+      dispatch(
+        createNotification('Please fill all of the fields', 'warning', 5)
+      )
     } else {
       blogFormRef.current.toggleVisibility()
       dispatch(createBlog(blogObject))
@@ -38,13 +33,21 @@ const BlogList = () => {
       <Togglable buttonLabel="create new blog" ref={blogFormRef}>
         <BlogForm createBlog={addBlog} />
       </Togglable>
-      {blogsToView.map((blog) => (
-        <div style={blogStyle} key={blog.id}>
-          <Link to={`/blogs/${blog.id}`}>
-            {blog.title} {blog.author}
-          </Link>
-        </div>
-      ))}
+
+      <Table striped>
+        <tbody>
+          {blogsToView.map((blog) => (
+            <tr key={blog.id}>
+              <td>
+                <Link to={`/blogs/${blog.id}`}>
+                  {blog.title} {blog.author}
+                </Link>
+              </td>
+              <td>Likes: {blog.likes}</td>
+            </tr>
+          ))}
+        </tbody>
+      </Table>
     </div>
   )
 }

@@ -55,7 +55,7 @@ export const createBlog = (blogObject) => {
     dispatch(
       createNotification(
         `A new blog ${returnedBlog.title} by ${returnedBlog.author} added`,
-        'info',
+        'success',
         5
       )
     )
@@ -85,13 +85,13 @@ export const removeBlog = (blog) => {
       dispatch(
         createNotification(
           `Blog ${blog.title} by ${blog.author} removed`,
-          'info',
+          'success',
           5
         )
       )
     } catch (expection) {
       dispatch(
-        createNotification('only the creator can delete a blog', 'alert', 5)
+        createNotification('only the creator can delete a blog', 'danger', 5)
       )
     }
   }

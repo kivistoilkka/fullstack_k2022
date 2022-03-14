@@ -33,9 +33,9 @@ export const login = (username, password) => {
       window.localStorage.setItem('loggedBloglistUser', JSON.stringify(user))
       blogService.setToken(user.token)
       dispatch(setUser(user))
-      dispatch(createNotification(`Welcome ${user.name}!`, 'info', 5))
+      dispatch(createNotification(`Welcome ${user.name}!`, 'success', 5))
     } catch (exception) {
-      dispatch(createNotification('Wrong username or password', 'alert', 5))
+      dispatch(createNotification('Wrong username or password', 'warning', 5))
     }
   }
 }
@@ -45,7 +45,7 @@ export const logout = () => {
     window.localStorage.removeItem('loggedBloglistUser')
     dispatch(setUser(null))
     blogService.setToken(null)
-    dispatch(createNotification('You have logged out, good bye!', 'info', 5))
+    dispatch(createNotification('You have logged out, good bye!', 'success', 5))
   }
 }
 
