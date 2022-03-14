@@ -65,17 +65,12 @@ export const createBlog = (blogObject) => {
 export const likeBlog = (blog) => {
   return async (dispatch) => {
     const likedBlog = await blogService.update(blog.id, {
-      ...blog,
       likes: blog.likes + 1,
     })
     dispatch(
       setBlog({
         ...likedBlog,
-        user: {
-          username: blog.user.username,
-          name: blog.user.name,
-          id: likedBlog.user,
-        },
+        user: blog.user,
       })
     )
   }
@@ -99,6 +94,18 @@ export const removeBlog = (blog) => {
         createNotification('only the creator can delete a blog', 'alert', 5)
       )
     }
+  }
+}
+
+export const commentBlog = (comment, blog) => {
+  return async (dispatch) => {
+    const commentedBlog = await blogService.comment(blog.id, comment)
+    dispatch(
+      setBlog({
+        ...commentedBlog,
+        user: blog.user,
+      })
+    )
   }
 }
 
