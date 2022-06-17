@@ -1,0 +1,15 @@
+{
+  "name": "webbmi_webexercises",
+  "version": "0.0.1",
+  "description": "",
+  "main": "index.ts",
+  "scripts": {
+    "ts-node": "ts-node"
+  },
+  "author": "Ilkka Kivistö",
+  "license": "MIT",
+  "devDependencies": {
+    "ts-node": "^10.8.1",
+    "typescript": "^4.7.3"
+  }
+}
