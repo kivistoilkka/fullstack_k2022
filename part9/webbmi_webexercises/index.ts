@@ -34,22 +34,24 @@ app.post('/exercises', (req, res) => {
     return res.status(400).send({ error: 'parameters missing' });
   }
 
-  if (isNaN(Number(target))) {
-    return res.status(400).send({ error: 'malformatted parameters' });
-  }
-
   if (daily_exercises instanceof Array) {
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-    if (daily_exercises.length === 0 || daily_exercises.some(d => isNaN(d))) {
+    if (
+      daily_exercises.length === 0 ||
+      isNaN(Number(target)) ||
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      daily_exercises.some((d: any) => isNaN(Number(d)))
+    ) {
       return res.status(400).send({ error: 'malformatted parameters' });
     }
+    const result = calculateExercises(
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      daily_exercises.map((d: any) => Number(d)),
+      Number(target)
+    );
+    return res.send(result);
   } else {
     return res.status(400).send({ error: 'malformatted parameters' });
   }
-  
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-  const result = calculateExercises(daily_exercises, target);
-  return res.send(result);
 });
 
 const PORT = 3003;

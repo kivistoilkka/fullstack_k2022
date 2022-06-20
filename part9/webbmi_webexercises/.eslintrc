@@ -23,6 +23,6 @@
   },
   "parser": "@typescript-eslint/parser",
   "parserOptions": {
-    "project": "./part9/webbmi_webexercises/tsconfig.json"
+    "project": "./tsconfig.json"
   }
 }
