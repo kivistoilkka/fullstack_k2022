@@ -19,7 +19,6 @@ const parseBmiArguments = (args: Array<string>): BmiValues => {
     }
 }
 
-
 const calculateBmi = (height: number, weight: number) : string => {
     if (height === 0) throw new Error('Can\'t divide by 0!')
     const bmi = weight / ((height/100) ** 2);
@@ -34,13 +33,17 @@ const calculateBmi = (height: number, weight: number) : string => {
     }
 }
 
-try {
-    const { height, weight } = parseBmiArguments(process.argv);
-    console.log(calculateBmi(height, weight));
-} catch (error: unknown) {
-    let errorMessage = 'Something went wrong.'
-    if (error instanceof Error) {
-        errorMessage += ' Error: ' + error.message
+if (require.main === module) {
+    try {
+        const { height, weight } = parseBmiArguments(process.argv);
+        console.log(calculateBmi(height, weight));
+    } catch (error: unknown) {
+        let errorMessage = 'Something went wrong.'
+        if (error instanceof Error) {
+            errorMessage += ' Error: ' + error.message
+        }
+        console.log(errorMessage);
     }
-    console.log(errorMessage);
 }
+
+export { calculateBmi };
