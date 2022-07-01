@@ -1,6 +1,8 @@
 {
     "eslint.workingDirectories": [
         "./part9/webbmi_webexercises",
-        "./part9/typescript_app"
+        "./part9/typescript_app",
+        "./part9/flight_diaries",
+        "./part9/patientor_backend"
     ]
 }
