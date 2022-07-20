@@ -21,7 +21,12 @@ interface CourseSubmissionPart extends CoursePartDescription {
   exerciseSubmissionLink: string;
 }
 
-type CoursePart = CourseNormalPart | CourseProjectPart | CourseSubmissionPart;
+interface CourseSpecialPart extends CoursePartDescription {
+  type: "special";
+  requirements: string[];
+}
+
+type CoursePart = CourseNormalPart | CourseProjectPart | CourseSubmissionPart | CourseSpecialPart;
 
 const Header = ({ name }: { name: string }) => {
   return <h1>{name}</h1>;
@@ -50,6 +55,12 @@ const Part = ({ part }: { part: CoursePart }) => {
         <b>{part.name} {part.exerciseCount}</b><br />
         <i>{part.description}</i><br />
         submit to {part.exerciseSubmissionLink}
+      </p>)
+    case "special":
+      return (<p key={part.name}>
+        <b>{part.name} {part.exerciseCount}</b><br />
+        <i>{part.description}</i><br />
+        required skills: {part.requirements.join(', ')}
       </p>)
     default:
       return assertNever(part);
@@ -104,6 +115,13 @@ const App = () => {
       description: "Confusing description",
       exerciseSubmissionLink: "https://fake-exercise-submit.made-up-url.dev",
       type: "submission"
+    },
+    {
+      name: "Backend development",
+      exerciseCount: 21,
+      description: "Typing the backend",
+      requirements: ["nodejs", "jest"],
+      type: "special"
     }
   ];
 
