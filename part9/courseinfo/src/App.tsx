@@ -1,6 +1,36 @@
-import Header from "./components/Header";
-import Content from "./components/Content";
-import Total from "./components/Total";
+const Header = ({ name }: { name: string }) => {
+  return <h1>{name}</h1>;
+};
+
+interface CourseProps {
+  parts: { name: string, exerciseCount: number }[];
+};
+
+const Content = ({ parts }: CourseProps) => {
+  return (
+    <div>
+      {parts.map(({ name, exerciseCount}: { name: string, exerciseCount: number }) => {
+        return (
+          <p key={name}>
+            {name} {exerciseCount}
+          </p>
+        )
+      })}
+    </div>
+  );
+};
+
+const Total = ({ parts }: CourseProps) => {
+  return (
+    <div>
+      <p>
+        Number of exercises{" "}
+        {parts.reduce((carry, part) => carry + part.exerciseCount, 0)}
+      </p>
+    </div>
+  );
+};
+
 
 const App = () => {
   const courseName = "Half Stack application development";
