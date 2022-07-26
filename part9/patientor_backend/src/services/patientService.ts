@@ -10,12 +10,13 @@ const patients: Array<Patient> = patientData.map(obj => {
 });
 
 const getPatients = (): PatientWithoutSSN[] => {
-  return patients.map(({id, name, dateOfBirth, gender, occupation}) => ({
+  return patients.map(({id, name, dateOfBirth, gender, occupation, entries}) => ({
     id,
     name,
     dateOfBirth,
     gender,
-    occupation
+    occupation,
+    entries
   }));
 };
 
@@ -29,7 +30,13 @@ const addPatient = (entry: NewPatient): Patient => {
   return newPatientEntry;
 };
 
+const getPatient = (id: string): Patient | undefined => {
+  const patient = patients.find(p => p.id === id);
+  return patient;
+};
+
 export default {
   getPatients,
-  addPatient
+  addPatient,
+  getPatient
 };
