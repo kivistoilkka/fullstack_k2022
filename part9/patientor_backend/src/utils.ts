@@ -50,16 +50,9 @@ const parseOccupation = (occupation: unknown): string => {
   return occupation;
 };
 
-type Fields = {
-  name: unknown,
-  dateOfBirth: unknown,
-  ssn: unknown,
-  gender: unknown,
-  occupation: unknown
-};
-
 const toNewPatient = (
-  { name, dateOfBirth, ssn, gender, occupation }: Fields
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  { name, dateOfBirth, ssn, gender, occupation }: any
 ): NewPatient => {
   const newEntry: NewPatient = {
     name: parseName(name),
