@@ -1,7 +1,7 @@
 import { v1 as uuid } from 'uuid';
 import toNewPatient from '../utils';
-import patientData from '../../data/patients.json';
-import { Patient, PatientWithoutSSN, NewPatient } from '../types';
+import patientData from '../../data/patients';
+import { Patient, PublicPatient, NewPatient } from '../types';
 
 const patients: Array<Patient> = patientData.map(obj => {
   const object = toNewPatient(obj) as Patient;
@@ -9,14 +9,13 @@ const patients: Array<Patient> = patientData.map(obj => {
   return object;
 });
 
-const getPatients = (): PatientWithoutSSN[] => {
-  return patients.map(({id, name, dateOfBirth, gender, occupation, entries}) => ({
+const getPatients = (): PublicPatient[] => {
+  return patients.map(({ id, name, dateOfBirth, gender, occupation }) => ({
     id,
     name,
     dateOfBirth,
     gender,
-    occupation,
-    entries
+    occupation
   }));
 };
 
