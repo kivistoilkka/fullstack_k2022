@@ -62,6 +62,9 @@ const isEntryArray = (array: unknown[]): array is Entry[] => {
 
 const parseEntries = (entries: unknown): Entry[] => {
   if (!entries || !(entries instanceof Array) || !isEntryArray(entries)) {
+    if (!entries) {
+      return new Array<Entry>;
+    }
     throw new Error('Incorrect or missing entries: ' + entries);
   }
   return entries;
