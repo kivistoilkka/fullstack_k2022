@@ -1,7 +1,7 @@
 import { v1 as uuid } from 'uuid';
-import toNewPatient from '../utils';
+import { toNewPatient } from '../utils';
 import patientData from '../../data/patients';
-import { Patient, PublicPatient, NewPatient } from '../types';
+import { Patient, PublicPatient, NewPatient, Entry, NewEntry } from '../types';
 
 const patients: Array<Patient> = patientData.map(obj => {
   const object = toNewPatient(obj) as Patient;
@@ -19,10 +19,10 @@ const getPatients = (): PublicPatient[] => {
   }));
 };
 
-const addPatient = (entry: NewPatient): Patient => {
+const addPatient = (patientEntry: NewPatient): Patient => {
   const newPatientEntry = {
     id: uuid(),
-    ...entry
+    ...patientEntry
   };
 
   patients.push(newPatientEntry);
@@ -34,8 +34,22 @@ const getPatient = (id: string): Patient | undefined => {
   return patient;
 };
 
+const addEntry = (id: string, entry: NewEntry): Entry | undefined => {
+  const patient = getPatient(id);
+  if (!patient) {
+    return;
+  }
+  const newEntry = {
+    id: uuid(),
+    ...entry
+  };
+  patient.entries.push(newEntry);
+  return newEntry;
+};
+
 export default {
   getPatients,
   addPatient,
-  getPatient
+  getPatient,
+  addEntry
 };
