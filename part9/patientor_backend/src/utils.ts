@@ -132,13 +132,13 @@ const parseDiagnosisCodes = (diagnosisCodes: unknown): string[] => {
 };
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-const isHealtCheckRating = (param: any): param is HealthCheckRating => {
+const isHealthCheckRating = (param: any): param is HealthCheckRating => {
   // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
   return Object.values(HealthCheckRating).includes(param);
 };
 
 const parseHealthCheckRating = (rating: unknown): HealthCheckRating => {
-  if (!rating || !isHealtCheckRating(rating)) {
+  if (!rating === undefined || !isHealthCheckRating(rating)) {
     throw new Error('Incorrect or missing health check rating: ' + rating);
   }
   return rating;
