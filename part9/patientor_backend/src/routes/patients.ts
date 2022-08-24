@@ -33,13 +33,21 @@ router.get('/:id', (req, res) => {
 });
 
 router.post('/:id/entries', (req, res) => {
-  const patientId = req.params.id;
-  const newEntry = toNewEntry(req.body);
-  const addedEntry = patientService.addEntry(patientId, newEntry);
-  if (addedEntry) {
-    res.send(addedEntry);
-  } else {
-    res.status(404).end();
+  try {
+    const patientId = req.params.id;
+    const newEntry = toNewEntry(req.body);
+    const addedEntry = patientService.addEntry(patientId, newEntry);
+    if (addedEntry) {
+      res.json(addedEntry);
+    } else {
+      res.status(404).end();
+    }
+  } catch (error: unknown) {
+    let errorMessage = 'Something went wrong.';
+    if (error instanceof Error) {
+      errorMessage += ' Error: ' + error.message;
+    }
+    res.status(400).send(errorMessage);
   }
 });
 
